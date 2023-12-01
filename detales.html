@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        console.log("Window Location:", window.location);
+        const mysearch = window.location.search;
+        const urlrid = new URLSearchParams(mysearch);
+        const pramet = urlrid.get('rid');
+        var httpRequest = new XMLHttpRequest();
+        function getName(pramet) {
+        httpRequest.open("GET", `https://forkify-api.herokuapp.com/api/get?rId=${pramet}`);
+        httpRequest.send();
+        var result = {};
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                result = JSON.parse(httpRequest.responseText);
+                displayData(result);
+            }
+        }
+    }
+
+        function displayData(data) {
+            var dataHTML = `
+                <div class="col-lg-3">
+                    <div class="recipe bg-info"> 
+                        <h2>${data.recipe.title}</h2>
+                        <p>Author: ${data.recipe.publisher}</p>
+                        <p>Ingredients:</p>
+                        <ul>
+                            ${data.recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>`;
+
+            document.getElementById("prag").innerHTML = dataHTML;
+        }
+    </script>
+    <div id="prag">
+      
+    </div>
+</body>
+
+</html>
